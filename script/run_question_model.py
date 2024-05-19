@@ -4,14 +4,15 @@ from torch.utils.data import DataLoader
 from QuestionModel import QuestionModel
 import tqdm
 import torch
+import json
 
 
-def train(chatData, model, optim):
+def train(questionModel, model, optim):
 
-    epochs = 30
+    epochs = 25
 
-    for i in tqdm.tqdm(range(epochs)):
-        for X, a in chatData:
+    for _ in tqdm.tqdm(range(epochs)):
+        for X, a in questionModel:
             X = X.to(device)
             a = a.to(device)
             # optim.zero_grad()
@@ -24,7 +25,7 @@ def train(chatData, model, optim):
         print(infer("A caterpillar changing into a butterfly is an example of"))
 
 def infer(inp):
-    inp = "<startofstring>"+inp+"<bot>:"
+    inp = "<startofstring>" + inp + "<bot>:"
     inp = tokenizer(inp, return_tensors="pt")
     X = inp["input_ids"].to(device)
     a = inp["attention_mask"].to(device)
@@ -32,6 +33,21 @@ def infer(inp):
     output = tokenizer.decode(output[0])
     return output
 
+def validate():
+    data = []
+    with open("../data/test.jsonl", "r") as f:
+        for line in f:
+            data.append(json.loads(line))
+    question = []
+    correct = []
+    for i in data:
+        question.append(i['question'])
+        str = " and ".join(i['answers'])
+        correct.append(str)
+
+    for i in range(100):
+        print(infer(question[i]))
+    
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -48,9 +64,6 @@ model.resize_token_embeddings(len(tokenizer))
 
 model = model.to(device)
 
-# print(tokenizer.decode(model.generate(**tokenizer("hey i was good at basketball but ",
-#                          return_tensors="pt"))[0]))
-
 questionModel = QuestionModel("../data/train.jsonl", tokenizer)
 questionModel =  DataLoader(questionModel, batch_size=64)
 
@@ -62,6 +75,7 @@ print("training .... ")
 train(questionModel, model, optim)
 
 print("infer from model : ")
-while True:
-  inp = input()
-  print(infer(inp))
+# while True:
+#   inp = input()
+#   print(infer(inp))
+validate()

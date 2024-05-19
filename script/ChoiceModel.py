@@ -20,14 +20,14 @@ class ChoiceModel(Dataset):
         for i in range(0, len(self.question)):
             self.X.append("<startofstring>" + self.question[i] + "<choice>:" + self.choice[i] + "<bot>:" + self.answer[i] + "<endofstring>")
 
-        self.X = self.X[:6000]
+        # self.X = self.X[:6000]
 
         print(self.X[0])
 
         self.X_encoded = tokenizer(self.X,max_length=60, truncation=True, padding="max_length", return_tensors="pt")
         self.input_ids = self.X_encoded['input_ids']
         self.attention_mask = self.X_encoded['attention_mask']
-
+        
     def __len__(self):
         return len(self.X)
 
