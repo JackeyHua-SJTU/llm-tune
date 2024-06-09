@@ -27,9 +27,6 @@ print(f"Chinese tokenizer has been saved to {output_dir}")
 
 # Test
 chinese_tokenizer = ChineseTokenizer.from_pretrained(output_dir)
-print(tokenizer.all_special_tokens)
-print(tokenizer.all_special_ids)
-print(tokenizer.special_tokens_map)
 text = '''饮水思源,爱国荣校。Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.'''
 print("Test text:\n", text)
 print(f"Tokenized by Chinese-LLaMA tokenizer:{chinese_tokenizer.tokenize(text)}")
