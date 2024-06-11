@@ -3,6 +3,10 @@
 # **NOTICE**
 ***We will post our latest test for quantized llama2 model via autoawq here!!!***
 
+Our comparison between AWQ quantized Llama model and original Llama model are as follows. You can see that the ppl of the former model is a bit larger than the latter one. But the difference is not that significant.
+
+![](comp.png)
+
 ## Basic Info
 This is the course project of CS3507. 
 
